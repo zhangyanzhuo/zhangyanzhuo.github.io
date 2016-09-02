@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		#box{
+		width: 500px;
+		height: 500px;
+		margin: 0 auto;
+		position: relative;
+		}
+		#box img{
+			width: 100%;
+			height: 100%;
+		}
+		a{
+			text-decoration: none;
+			width: 50px;
+			height: 50px;
+			position: absolute;
+			top:50%;
+			margin-top: -25px;
+			background-color: #ccc;
+			border-radius: 50%;
+			line-height: 50px;
+			text-align: center;
+			color:#fff;
+			font-size: 40px;
+		}
+		#prev{
+			left:20px;
+		}
+		#next{
+			right:20px;
+		}
+		#list{
+			padding: 0;
+			margin: 0;
+			position: absolute;
+			bottom: 20px;
+			left:50%;
+			margin-left: -75px;
+			width: 150px;
+		}
+		#list li{
+			list-style: none;
+			background-color: yellow;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			float: left;
+			margin: 0 5px;
+			cursor:pointer;
+			position: relative;
+		}
+		#list li.active{
+			background-color: #ccc;
+		}
+		#list li img{
+			display: none;
+			width: 100px;
+			height: 100px;
+			position: absolute;
+			bottom: 30px;
+			left: 50%;
+			margin-left: -50px;
+		}
+		#list li div{
+			border: 10px solid transparent;
+			border-top-color:#ccc;
+			position: absolute;
+			top:-10px; 
+			display: none;
+		}
+		#list li.active div,#list li.active img{
+			display: block;
+		}
+	</style>
+	<script>
+		window.onload = function() {
+			function Drag() {
+				this.prev = document.getElementById('prev');
+				this.next = document.getElementById('next');
+				this.img = document.getElementById('img');
+				this.lis = document.querySelectorAll('li');
+				this.imgs = ['img/0.jpg','img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg'];
+				this.num = 0;
+				this.n = 0;
+				this.click(this.prev);
+				this.click(this.next);
+				this.click(this.lis);
+			}
+			Drag.prototype.click = function(obj) {
+				var _this = this;
+				if(obj == this.prev){
+					obj.onclick = function() {
+						_this.prevClick();
+					}
+				}
+				if(obj == this.next){
+					obj.onclick = function() {
+						_this.nextClick();
+					}
+				}
+				if(obj == this.lis){
+					for(var i = 0; i < obj.length; i++) {
+						obj[i].index = i;
+						obj[i].onclick = function() {
+							_this.num = this.index;
+							_this.tab();
+						}
+						obj[i].onmouseover = function() {
+							this.className = 'active';
+						}
+						obj[i].onmouseout = function() {
+							this.className = '';
+						}
+					}
+				}
+				
+			}
+			Drag.prototype.tab = function() {
+				this.img.src = this.imgs[this.num];
+				this.lis[this.num].style.backgroundColor = 'red';
+				this.lis[this.n].style.backgroundColor = 'yellow';
+				this.n = this.num;
+			}
+			Drag.prototype.prevClick = function() {
+				this.num--;
+				if(this.num < 0) {
+					this.num = this.lis.length - 1;
+				}
+				this.tab();
+			}
+			Drag.prototype.nextClick = function() {
+				this.num++;
+				if(this.num > this.lis.length - 1) {
+					this.num = 0;
+				}
+				this.tab();
+			}
+			var o = new Drag;
+		}
+	</script>
+	<body>
+		<div id="box">
+		<img src="img/0.jpg" alt="" id="img">
+		<a href="javascript:;" id="prev">&lt</a>
+		<a href="javascript:;" id="next">&gt</a>
+		<ul id ="list">
+			<li style="background:red;">
+				<img src="img/0.jpg" alt="">
+				<div></div>
+			</li>
+			<li><img src="img/1.jpg" alt=""></li>
+			<li><img src="img/2.jpg" alt=""></li>
+			<li><img src="img/3.jpg" alt=""></li>
+			<li><img src="img/4.jpg" alt=""></li>
+		</ul>		
+	</div>
+
+	<p style="text-align: center;"></p>
+	</body>
+</html>
